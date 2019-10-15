@@ -11,7 +11,7 @@ public class AIController_ObstacleAvoidance : AIController
     //       OR: it can be multiple "feelers" / raycasts 
     //       OR: You can use Vector3.Dot() to add some intelligent turning.
 
-
+    public float turnDistance = 5;
     public float speed = 3.5f;
     public float turnSpeed = 360;
     public float avoidMoveTime = 1.5f;
@@ -125,10 +125,19 @@ public class AIController_ObstacleAvoidance : AIController
     {
         RaycastHit hitInfo;
 
+
         // Return false if we cannot move forward
-        if (Physics.SphereCast(new Ray(pawn.tf.position, pawn.tf.forward), 0.35f, out hitInfo, speed * Time.deltaTime * 2, GameManager.instance.notANodeNotFloor))
+        //if (Physics.SphereCast(new Ray(pawn.tf.position, pawn.tf.forward), 0.35f, out hitInfo, speed * Time.deltaTime * 2, GameManager.instance.notANodeNotFloor))
+        if(Physics.SphereCast(pawn.transform.position, turnDistance, pawn.tf.forward, out hitInfo, speed * Time.deltaTime * 2, GameManager.instance.notANodeNotFloor))
         {
-            return false;
+            if (Vector3.Dot(pawn.tf.forward, hitInfo.transform.position - pawn.tf.position) >= 0.5)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {
