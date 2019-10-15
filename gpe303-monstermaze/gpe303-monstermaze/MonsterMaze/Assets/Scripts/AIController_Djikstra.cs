@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AIController_Djikstra : AIController
 {
-    // TODO: Create this Class to use Djikstra's Algorithm!
+    // Create this Class to use Djikstra's Algorithm!
     //       Use AIController_BreadthFirst as an example!
 
 
@@ -54,7 +54,7 @@ public class AIController_Djikstra : AIController
     }
     protected override void LookAndAnimate()
     {
-        // TODO: Most pathfinding code requres your AI to turn to look at a target, 
+        // Most pathfinding code requres your AI to turn to look at a target, 
         //       do that here!
 
         // This will make the pawn "animate" the Naruto run if it is moving fast enough
@@ -195,7 +195,7 @@ public class AIController_Djikstra : AIController
         // Recalculate Path (if needed)
         yield return StartCoroutine("CalculatePath");
 
-        //TODO: Anything after the path is calculate that needs to be done
+        // Anything after the path is calculate that needs to be done
 
         // Return to previous state
         isRunning = wasRunning;
@@ -224,11 +224,11 @@ public class AIController_Djikstra : AIController
             }
         }
         // else we reached the end
-        else
-        {
-            // TODO: Add work to do if we are at the end
+        //else
+        //{
+        //    // Add work to do if we are at the end
 
-        }
+        //}
 
     }
 
@@ -253,20 +253,45 @@ public class AIController_Djikstra : AIController
         //       node with the smallest value in a list!
 
         NodeRecord smallestElement = null;
+        float smallestCost = 0;
 
         foreach (NodeRecord nodeRecord in targetList)
         {
-            //if (smallestElement != null) { Debug.Log("Current Smallest Cost: " + smallestElement.connection.cost +
-            //    "\nNext Node Cost: " + nodeRecord.connection.cost); }
+            float totalPathCost = 0;
+            //Debug.Log("TPC: " + totalPathCost);
+            NodeRecord currentNode = nodeRecord;
+
+            // Work back through the path, accumulating connections
+            while (currentNode.node != GameManager.instance.startNode)
+            {
+                //Add node cost
+                totalPathCost += currentNode.connection.cost;
+                //(NOTE: Move to the previous connection)
+                currentNode = FindInList(closedList, currentNode.connection.fromNode);
+            }
+            //if (smallestElement != null)
+            //{
+            //    Debug.Log("Current Smallest Cost: " + smallestCost +
+            //              "\nNext Node Cost: " + totalPathCost);
+            //}
             if (smallestElement == null)
             {
+                //Debug.Log("No current smallest");
                 smallestElement = nodeRecord;
+                smallestCost = totalPathCost;
             }
-            else if(nodeRecord.connection.cost < smallestElement.connection.cost)
+            else if(totalPathCost < smallestCost)
             {
+                //Debug.Log("Next node is smaller");
                 smallestElement = nodeRecord;
+                smallestCost = totalPathCost;
             }
+            //else
+            //{
+            //    Debug.Log("Smallest node is smaller");
+            //}
         }
+        //Debug.Log("Final Cost" + smallestCost);
         return smallestElement;
     }
 

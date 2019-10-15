@@ -27,14 +27,16 @@ public class AIController_BreadthFirst : AIController
         startNode = GameManager.instance.startNode;
         base.Start();
     }
+
     // Update is called once per frame
     public override void Update()
     {
         base.Update();
     }
+
     public override IEnumerator CalculatePath()
     {
-        // TODO: Any calculations for finding the path. Be sure to put a "yield return null" at the end of each step, 
+        // Any calculations for finding the path. Be sure to put a "yield return null" at the end of each step, 
         //       so it happens over multiple frames
         
         // Initialize the Record
@@ -185,11 +187,13 @@ public class AIController_BreadthFirst : AIController
         isRunning = true;
         yield return null; // End of one frame draw
     }
+
     protected override void LookAndAnimate()
     {
         // Animate the pawn based on our movement velocity
         pawn.Animate();
     }
+
     protected override IEnumerator OnAddObstacle()
     {
         // Save if they were running
